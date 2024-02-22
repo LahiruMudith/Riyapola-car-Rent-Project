@@ -1,0 +1,19 @@
+.bgImage {
+    background-image: url("../../assets/backgroundImage.jpg");
+    padding: 0;
+    margin: 0;
+    /*z-index: -1;*/
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    height: 97vh;
+}
+.logo {
+    position: relative;
+    bottom: 30vh;
+}
+.textPic {
+    position: relative;
+    top: 26vh;
+    right: 10vw;
+}
