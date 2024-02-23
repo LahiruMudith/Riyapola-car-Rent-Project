@@ -3,6 +3,7 @@ import {Box, Button} from "@mui/material";
 import logo from "../../assets/logo.png"
 import textPic from "../../assets/Text.png"
 import bgImage from "../../assets/backgroundImage.jpg"
+import LoginMenu from "../../component/LoginMenu/LoginMenu.jsx";
 
 const loginBtnSX = {
     width:'15vw',
@@ -23,7 +24,7 @@ export default function LoginPage() {
         <Box className={"bgImage"}>
             <img src={logo} className={"logo"}/>
             <img src={textPic} className={"textPic"}/>
-            <Button variant="outlined" sx={loginBtnSX}>Login</Button>
+            <LoginMenu/>
         </Box>
     )
 }
