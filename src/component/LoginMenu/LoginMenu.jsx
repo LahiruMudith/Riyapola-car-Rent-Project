@@ -6,6 +6,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {TextField} from "@mui/material";
+import {useState} from "react";
+import Swal from 'sweetalert2'
 
 const loginBtnSX = {
     width:'15vw',
@@ -20,17 +22,36 @@ const loginBtnSX = {
         borderColor:'#ffffff',
     },
 };
+const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 1500,
+    didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+    }
+});
 
 export default function LoginMenu() {
     const [open, setOpen] = React.useState(false);
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
 
     const handleClickOpen = () => {
         setOpen(true);
     };
-
     const handleClose = () => {
         setOpen(false);
     };
+    const loginBtnClick = () => {
+        handleClose()
+        Toast.fire({
+            icon: "success",
+            title: "Log in successfully"
+        });
+    }
+
 
     return (
         <React.Fragment>
@@ -47,11 +68,17 @@ export default function LoginMenu() {
                     {"Login Menu"}
                 </DialogTitle>
                 <DialogContent sx={{width:'500px'}}>
-                    <TextField id="outlined-basic" label="Outlined" variant="outlined" sx={{width:'31vw', margin:'1vh'}} />
-                    <TextField id="outlined-basic" label="Outlined" variant="outlined" sx={{width:'31vw', margin:'1vh'}} />
+                    <TextField sx={{width:'31vw', margin:'1vh'}}
+                               id="outlined-basic" label="Email" variant="outlined"
+                               onChange={val => setEmail(val.target.value)}
+                    />
+                    <TextField sx={{width:'31vw', margin:'1vh'}}
+                               id="outlined-basic" label="Password" variant="outlined"
+                               onChange={val => setPassword(val.target.value)}
+                    />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} autoFocus sx={{color:'#FF7200'}}>
+                    <Button onClick={() => loginBtnClick()} autoFocus sx={{color:'#FF7200'}}>
                         Login
                     </Button>
                     <Button onClick={handleClose}>Cancle</Button>
