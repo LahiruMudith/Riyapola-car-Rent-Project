@@ -2,7 +2,10 @@ import {Card, CardActions, CardContent} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-
+import {useEffect} from "react";
+import instance from "../../services/AxiosOrder.jsx";
+import axios from "axios";
+import vehi_photo from "../../assets/WhatsApp Image 2024-02-20 at 17.00.18_8f6372ac.jpg"
 
 export default function ViewAllVehicle() {
     const Btns = {
@@ -20,27 +23,35 @@ export default function ViewAllVehicle() {
             borderColor:'#ffffff',
         },
     };
+
+    useEffect(() => {
+        instance({
+            method: "get",
+            url: "/vehicle/search",
+        }).then(function (response) {
+            console.log(response.data)
+        });
+    }, []);
+
     return (
         <Box sx={{display:'flex', flexWrap:'wrap'}}>
-            <Card sx={{width:'29vw', minHeight:'42vh', backgroundColor:'#e3802d', borderRadius:'10px', margin:'10px'}}>
+            <Card sx={{width:'29vw', height:'40vh', backgroundColor:'#e3802d', borderRadius:'10px', margin:'10px'}}>
                 <CardContent>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        Word of the Day
-                    </Typography>
-                    <Typography variant="h5" component="div">
-                        lahiru
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        adjective
-                    </Typography>
-                    <Typography variant="body2">
-                        well meaning and kindly.
-                        <br />
-                        {'"a benevolent smile"'}
-                    </Typography>
-                    <Box sx={{position:'relative', top:'13.2vh', display:'flex'}}>
-                        <Button variant="outlined" size="small" sx={Btns}>Update Vehicle Details</Button>
-                        <Button variant="outlined" size="small" sx={Btns}>Drop Vehicle</Button>
+                    <Box sx={{display:'block'}}>
+                        <img src={vehi_photo}
+                             style={{width: '7.5vw', display: 'flex', justifyContent: 'space-around'}}/>
+                        <Box sx={{
+                            width: '19vw',
+                            height: '25vh',
+                            position: 'relative',
+                            left: '8vw',
+                            bottom: '22vh',
+                            border: '1px solid white'
+                        }}>Discrition</Box>
+                        <Box sx={{position: 'relative', top: '-17vh', display: 'flex'}}>
+                            <Button variant="outlined" size="small" sx={Btns}>Update Vehicle Details</Button>
+                            <Button variant="outlined" size="small" sx={Btns}>Drop Vehicle</Button>
+                        </Box>
                     </Box>
                 </CardContent>
             </Card>

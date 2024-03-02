@@ -35,8 +35,8 @@ const Toast = Swal.mixin({
 
 export default function LoginMenu() {
     const [open, setOpen] = React.useState(false);
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("Email")
+    const [password, setPassword] = useState("Password")
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -46,6 +46,7 @@ export default function LoginMenu() {
     };
     const loginBtnClick = () => {
         handleClose()
+        alert(email + password)
         Toast.fire({
             icon: "success",
             title: "Log in successfully"
@@ -69,11 +70,11 @@ export default function LoginMenu() {
                 </DialogTitle>
                 <DialogContent sx={{width:'500px'}}>
                     <TextField sx={{width:'31vw', margin:'1vh'}}
-                               id="outlined-basic" label="Email" variant="outlined"
+                               id="outlined-basic" label={email} variant="outlined"
                                onChange={val => setEmail(val.target.value)}
                     />
                     <TextField sx={{width:'31vw', margin:'1vh'}}
-                               id="outlined-basic" label="Password" variant="outlined"
+                               id="outlined-basic" label={password} variant="outlined"
                                onChange={val => setPassword(val.target.value)}
                     />
                 </DialogContent>
