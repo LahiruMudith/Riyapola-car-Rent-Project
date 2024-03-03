@@ -2,12 +2,16 @@ import {Card, CardActions, CardContent} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import instance from "../../services/AxiosOrder.jsx";
 import axios from "axios";
 import vehi_photo from "../../assets/WhatsApp Image 2024-02-20 at 17.00.18_8f6372ac.jpg"
+import Swal from "sweetalert2";
+import VehicleUpdateMenu from "../../component/VehicleUpdateMenu/VehicleUpdateMenu.jsx";
 
 export default function ViewAllVehicle() {
+    const [data, setData] = useState([])
+
     const Btns = {
         width:'14vw',
         boxShadow: 3,
@@ -29,32 +33,78 @@ export default function ViewAllVehicle() {
             method: "get",
             url: "/vehicle/search",
         }).then(function (response) {
+            setData(response.data)
             console.log(response.data)
         });
-    }, []);
+    }, [data]);
+
+    const deleteVehivle = (vehicleNumber) => {
+        Swal.fire({
+            title: "Do you want to delete this vehicle?",
+            showDenyButton: true,
+            showConfirmButton:false,
+            showCancelButton: true,
+            denyButtonText: "Delete",
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isDenied) {
+                Swal.fire("Vehicle Deleted!", "", "success");
+                instance.delete(`vehicle/delete/${vehicleNumber}`)
+                    .then(response => {
+                        instance({
+                            method: "get",
+                            url: "/vehicle/search",
+                        }).then(function (response) {
+                            setData(response.data)
+                            console.log(response.data)
+                        });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            } else if (result.isDismissed) {
+
+            }
+        });
+    }
+
+    const UpdateVehicle = () => {
+        <VehicleUpdateMenu/>
+    }
 
     return (
         <Box sx={{display:'flex', flexWrap:'wrap'}}>
-            <Card sx={{width:'29vw', height:'40vh', backgroundColor:'#e3802d', borderRadius:'10px', margin:'10px'}}>
-                <CardContent>
-                    <Box sx={{display:'block'}}>
-                        <img src={vehi_photo}
-                             style={{width: '7.5vw', display: 'flex', justifyContent: 'space-around'}}/>
-                        <Box sx={{
-                            width: '19vw',
-                            height: '25vh',
-                            position: 'relative',
-                            left: '8vw',
-                            bottom: '22vh',
-                            border: '1px solid white'
-                        }}>Discrition</Box>
-                        <Box sx={{position: 'relative', top: '-17vh', display: 'flex'}}>
-                            <Button variant="outlined" size="small" sx={Btns}>Update Vehicle Details</Button>
-                            <Button variant="outlined" size="small" sx={Btns}>Drop Vehicle</Button>
-                        </Box>
-                    </Box>
-                </CardContent>
-            </Card>
+            {
+                data.map((val,index) => (
+                    <Card key={index} sx={{width:'29vw', height:'40vh', backgroundColor:'#e3802d', borderRadius:'10px', margin:'10px'}}>
+                        <CardContent>
+                            <Box sx={{display:'block'}}>
+                                <img src={vehi_photo}
+                                     style={{width: '7.5vw', display: 'flex', justifyContent: 'space-around'}}/>
+                                <Box sx={{
+                                    width: '19vw',
+                                    height: '25vh',
+                                    position: 'relative',
+                                    left: '8vw',
+                                    bottom: '22vh',
+                                    border: '1px solid white',
+                                    borderRadius:'2vh',
+                                    paddingLeft: '1vw',
+                                }}>
+                                    <p style={{fontFamily:'monospace'}}>Vehicle Number: <span>{val.V_Number}</span></p>
+                                    <p style={{fontFamily:'monospace'}}>Vehicle Name: <span>{val.V_Name}</span></p>
+                                    <p style={{fontFamily:'monospace'}}>Vehicle Color: <span>{val.color}</span></p>
+                                    <p style={{fontFamily:'monospace'}}>Price (1 Day): <span>{val.Day_Price}</span></p>
+                                </Box>
+                                <Box sx={{position: 'relative', top: '-17vh', display: 'flex'}}>
+                                    <VehicleUpdateMenu style={Btns}/>
+                                    <Button variant="outlined" size="small" sx={Btns} onClick={() => deleteVehivle(val.V_Number)}>Drop Vehicle</Button>
+                                </Box>
+                            </Box>
+                        </CardContent>
+                    </Card>
+                ))
+            }
         </Box>
 
     )
