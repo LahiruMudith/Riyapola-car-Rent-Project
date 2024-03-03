@@ -9,6 +9,18 @@ import vehi_photo from "../../assets/WhatsApp Image 2024-02-20 at 17.00.18_8f637
 import Swal from "sweetalert2";
 import VehicleUpdateMenu from "../../component/VehicleUpdateMenu/VehicleUpdateMenu.jsx";
 
+const Toast = Swal.mixin({
+    toast: true,
+    position: "bottom-end",
+    showConfirmButton: false,
+    timer: 1000,
+    timerProgressBar: false,
+    didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+    }
+});
+
 export default function ViewAllVehicle() {
     const [data, setData] = useState([])
 
@@ -34,9 +46,8 @@ export default function ViewAllVehicle() {
             url: "/vehicle/search",
         }).then(function (response) {
             setData(response.data)
-            console.log(response.data)
         });
-    }, [data]);
+    }, [<data></data>]);
 
     const deleteVehivle = (vehicleNumber) => {
         Swal.fire({
@@ -48,16 +59,22 @@ export default function ViewAllVehicle() {
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isDenied) {
-                Swal.fire("Vehicle Deleted!", "", "success");
+                Toast.fire({
+                    title: 'Delete Successfully!',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1000
+                })
                 instance.delete(`vehicle/delete/${vehicleNumber}`)
                     .then(response => {
-                        instance({
-                            method: "get",
-                            url: "/vehicle/search",
-                        }).then(function (response) {
-                            setData(response.data)
-                            console.log(response.data)
-                        });
+                        useEffect(() => {
+                            instance({
+                                method: "get",
+                                url: "/vehicle/search",
+                            }).then(function (response) {
+                                setData(response.data)
+                            });
+                        }, [data]);
                     })
                     .catch(error => {
                         console.error(error);
@@ -97,7 +114,12 @@ export default function ViewAllVehicle() {
                                     <p style={{fontFamily:'monospace'}}>Price (1 Day): <span>{val.Day_Price}</span></p>
                                 </Box>
                                 <Box sx={{position: 'relative', top: '-17vh', display: 'flex'}}>
-                                    <VehicleUpdateMenu style={Btns}/>
+                                    <VehicleUpdateMenu style={Btns}
+                                                       vehi_num={val.V_Number}
+                                                       vehi_name={val.V_Name}
+                                                       Propscolor={val.color}
+                                                       Propsprice={val.Day_Price}
+                                    />
                                     <Button variant="outlined" size="small" sx={Btns} onClick={() => deleteVehivle(val.V_Number)}>Drop Vehicle</Button>
                                 </Box>
                             </Box>
