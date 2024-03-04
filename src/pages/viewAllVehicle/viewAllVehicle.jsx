@@ -1,10 +1,8 @@
 import {Card, CardActions, CardContent} from "@mui/material";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {useEffect, useState} from "react";
 import instance from "../../services/AxiosOrder.jsx";
-import axios from "axios";
 import vehi_photo from "../../assets/WhatsApp Image 2024-02-20 at 17.00.18_8f6372ac.jpg"
 import Swal from "sweetalert2";
 import VehicleUpdateMenu from "../../component/VehicleUpdateMenu/VehicleUpdateMenu.jsx";
@@ -47,7 +45,7 @@ export default function ViewAllVehicle() {
         }).then(function (response) {
             setData(response.data)
         });
-    }, [<data></data>]);
+    }, [data]);
 
     const deleteVehivle = (vehicleNumber) => {
         Swal.fire({
